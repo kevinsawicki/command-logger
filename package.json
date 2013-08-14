@@ -4,7 +4,8 @@
   "main": "./lib/command-logger",
   "description": "View a heat map of your Atom activity. Open from the command palette.",
   "dependencies": {
-    "d3": "~3.2.8"
+    "d3": "~3.2.8",
+    "humanize-plus": "~1.4.2"
   },
   "repository": {
     "type": "git",

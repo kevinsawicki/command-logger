@@ -79,8 +79,8 @@ class CommandLoggerView extends ScrollView
         previous + 1
     commandCount = node.children.reduce(reduceCommandCount, 0)
 
-    commandText = "#{humanize.intcomma(commandCount)} #{humanize.pluralize(commandCount, 'command')}"
-    invocationText = "#{humanize.intcomma(runCount)} #{humanize.pluralize(runCount, 'invocation')}"
+    commandText = "#{humanize.intComma(commandCount)} #{humanize.pluralize(commandCount, 'command')}"
+    invocationText = "#{humanize.intComma(runCount)} #{humanize.pluralize(runCount, 'invocation')}"
     @categorySummary.text("#{commandText}, #{invocationText}")
 
   updateTreeMapSize: ->
