@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "main": "./lib/command-logger",
   "description": "View a heat map of your Atom activity. Open from the command palette.",
+  "dependencies": {
+    "d3": "~3.2.8"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/atom/command-logger.git"
