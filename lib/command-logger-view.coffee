@@ -1,6 +1,4 @@
-{$$$} = require 'space-pen'
-ScrollView = require 'scroll-view'
-_ = require 'underscore'
+{_, $$$, ScrollView} = require 'atom-api'
 humanize = require 'humanize-plus'
 
 module.exports =

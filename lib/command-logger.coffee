@@ -1,4 +1,4 @@
-$ = require 'jquery'
+{$} = require 'atom-api'
 
 module.exports =
   eventLog: {}
