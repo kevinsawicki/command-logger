@@ -1,4 +1,4 @@
-{_, $$$, ScrollView} = require 'atom-api'
+{_, $$$, ScrollView} = require 'atom'
 humanize = require 'humanize-plus'
 
 module.exports =
