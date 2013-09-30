@@ -4,9 +4,9 @@ humanize = require 'humanize-plus'
 module.exports =
 class CommandLoggerView extends ScrollView
   @content: (rootView) ->
-    @div class: 'command-logger', tabindex: -1, =>
-      @h4 class: 'category-header', outlet: 'categoryHeader'
-      @h5 class: 'category-summary', outlet: 'categorySummary'
+    @div class: 'pane-item padded command-logger', tabindex: -1, =>
+      @p class: 'text-highlight', outlet: 'categoryHeader'
+      @p class: 'text-info', outlet: 'categorySummary'
       @div class: 'tree-map', outlet: 'treeMap'
 
   eventLog: null
@@ -82,8 +82,8 @@ class CommandLoggerView extends ScrollView
     @categorySummary.text("#{commandText}, #{invocationText}")
 
   updateTreeMapSize: ->
-    @treeMap.width(@width() - 20)
-    @treeMap.height(@height() - @categoryHeader.outerHeight() - @categorySummary.outerHeight() - 20)
+    @treeMap.width(@width())
+    @treeMap.height(@height() - @treeMap.offset().top)
 
   addTreeMap: ->
     root =

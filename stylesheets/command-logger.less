@@ -6,15 +6,25 @@
   left: 0;
   overflow: auto;
   z-index: 99;
+
+  p {
+    text-align: center;
+  }
 }
 
-.command-logger-node-text div {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-  cursor: pointer;
+body.command-logger-node-text {
+  background-color: transparent;
 }
 
-.command-logger-node-text span {
-  -webkit-user-select: none;
+.command-logger-node-text {
+  div {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  span {
+    -webkit-user-select: none;
+  }
 }
