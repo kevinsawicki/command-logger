@@ -5,7 +5,7 @@ describe "CommandLogger", ->
 
   beforeEach ->
     window.rootView = new RootView
-    rootView.open('sample.js')
+    rootView.openSync('sample.js')
     commandLogger = atom.activatePackage('command-logger').mainModule
     commandLogger.eventLog = {}
     editor = rootView.getActiveView()
