@@ -1,0 +1,14 @@
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      {
+        'label': 'Command Logger'
+        'submenu': [
+          { 'label': 'Toggle', 'command': 'command-logger:toggle' }
+          { 'label': 'Clear Data', 'command': 'command-logger:clear-data' }
+        ]
+      }
+    ]
+  }
+]
