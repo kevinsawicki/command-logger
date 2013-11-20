@@ -7,8 +7,8 @@ module.exports =
 
   activate: (state) ->
     @eventLog = state.eventLog ? {}
-    rootView.command 'command-logger:clear-data', => @eventLog = {}
-    rootView.command 'command-logger:toggle', => @createView().toggle(@eventLog)
+    atom.rootView.command 'command-logger:clear-data', => @eventLog = {}
+    atom.rootView.command 'command-logger:toggle', => @createView().toggle(@eventLog)
 
     registerTriggeredEvent = (eventName) =>
       eventNameLog = @eventLog[eventName]

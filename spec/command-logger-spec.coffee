@@ -4,11 +4,11 @@ describe "CommandLogger", ->
   [commandLogger, editor] = []
 
   beforeEach ->
-    window.rootView = new RootView
-    rootView.openSync('sample.js')
-    commandLogger = atom.activatePackage('command-logger').mainModule
+    atom.rootView = new RootView
+    atom.rootView.openSync('sample.js')
+    commandLogger = atom.packages.activatePackage('command-logger').mainModule
     commandLogger.eventLog = {}
-    editor = rootView.getActiveView()
+    editor = atom.rootView.getActiveView()
 
   describe "when a command is triggered", ->
     it "records the number of times the command is triggered", ->
@@ -36,7 +36,7 @@ describe "CommandLogger", ->
       expect(commandLogger.eventLog['core:backspace']).toBeUndefined()
       editor.trigger 'core:backspace'
       expect(commandLogger.eventLog['core:backspace'].count).toBe 1
-      rootView.trigger 'command-logger:clear-data'
+      atom.rootView.trigger 'command-logger:clear-data'
       expect(commandLogger.eventLog['core:backspace']).toBeUndefined()
 
   describe "when an event is ignored", ->

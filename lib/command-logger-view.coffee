@@ -3,7 +3,7 @@ humanize = require 'humanize-plus'
 
 module.exports =
 class CommandLoggerView extends ScrollView
-  @content: (rootView) ->
+  @content: ->
     @div class: 'pane-item padded command-logger', tabindex: -1, =>
       @p class: 'text-highlight', outlet: 'categoryHeader'
       @p class: 'text-info', outlet: 'categorySummary'
@@ -172,7 +172,7 @@ class CommandLoggerView extends ScrollView
     d3.select('.command-logger').on('click', -> zoom(root))
 
   attach: ->
-    rootView.append(this)
+    atom.rootView.append(this)
     @addTreeMap()
     @focus()
 
@@ -180,5 +180,5 @@ class CommandLoggerView extends ScrollView
     return if @detaching
     @detaching = true
     super
-    rootView.focus()
+    atom.rootView.focus()
     @detaching = false
