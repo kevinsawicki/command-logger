@@ -1,14 +1,14 @@
-{RootView} = require 'atom'
+{WorkspaceView} = require 'atom'
 
 describe "CommandLogger", ->
   [commandLogger, editor] = []
 
   beforeEach ->
-    atom.rootView = new RootView
-    atom.rootView.openSync('sample.js')
+    atom.workspaceView = new WorkspaceView
+    atom.workspaceView.openSync('sample.js')
     commandLogger = atom.packages.activatePackage('command-logger').mainModule
     commandLogger.eventLog = {}
-    editor = atom.rootView.getActiveView()
+    editor = atom.workspaceView.getActiveView()
 
   describe "when a command is triggered", ->
     it "records the number of times the command is triggered", ->
@@ -36,7 +36,7 @@ describe "CommandLogger", ->
       expect(commandLogger.eventLog['core:backspace']).toBeUndefined()
       editor.trigger 'core:backspace'
       expect(commandLogger.eventLog['core:backspace'].count).toBe 1
-      atom.rootView.trigger 'command-logger:clear-data'
+      atom.workspaceView.trigger 'command-logger:clear-data'
       expect(commandLogger.eventLog['core:backspace']).toBeUndefined()
 
   describe "when an event is ignored", ->

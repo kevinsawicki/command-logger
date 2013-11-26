@@ -172,7 +172,7 @@ class CommandLoggerView extends ScrollView
     d3.select('.command-logger').on('click', -> zoom(root))
 
   attach: ->
-    atom.rootView.append(this)
+    atom.workspaceView.append(this)
     @addTreeMap()
     @focus()
 
@@ -180,5 +180,5 @@ class CommandLoggerView extends ScrollView
     return if @detaching
     @detaching = true
     super
-    atom.rootView.focus()
+    atom.workspaceView.focus()
     @detaching = false
