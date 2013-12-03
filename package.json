@@ -7,17 +7,8 @@
     "d3": "~3.2.8",
     "humanize-plus": "~1.4.2"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/atom/command-logger.git"
-  },
-  "bugs": {
-    "url": "https://github.com/atom/command-logger/issues"
-  },
+  "repository": "https://github.com/atom/command-logger",
   "engines": {
     "atom": "*"
-  },
-  "publishConfig": {
-    "registry": "https://atom.cloudant.com/registry/_design/app/_rewrite"
   }
 }
