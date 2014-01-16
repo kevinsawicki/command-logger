@@ -23,9 +23,9 @@ describe "CommandLogger", ->
       editor.trigger 'core:backspace'
       lastRun = commandLogger.eventLog['core:backspace'].lastRun
       expect(lastRun).toBeGreaterThan 0
-      start = new Date().getTime()
+      start = Date.now()
       waitsFor ->
-        new Date().getTime() > start
+        Date.now() > start
 
       runs ->
         editor.trigger 'core:backspace'

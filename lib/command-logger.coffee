@@ -22,7 +22,7 @@ module.exports =
           name: eventName
         @eventLog[eventName] = eventNameLog
       eventNameLog.count++
-      eventNameLog.lastRun = new Date().getTime()
+      eventNameLog.lastRun = Date.now()
     trigger = $.fn.trigger
     @originalTrigger = trigger
     $.fn.trigger = (event) ->
