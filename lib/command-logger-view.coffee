@@ -168,13 +168,13 @@ class CommandLoggerView extends ScrollView
               .on('click', (d) -> if node is d.parent then zoom(root) else zoom(d.parent))
 
     cell.append('rect')
-        .attr('width', (d) -> d.dx - 1)
-        .attr('height', (d) -> d.dy - 1)
+        .attr('width', (d) -> Math.max(0, d.dx - 1))
+        .attr('height', (d) -> Math.max(0, d.dy - 1))
         .style('fill', (d) -> color(d.parent.name))
 
     cell.append('foreignObject')
-        .attr('width', (d) -> d.dx - 1)
-        .attr('height', (d) -> d.dy - 1)
+        .attr('width', (d) -> Math.max(0, d.dx - 1))
+        .attr('height', (d) -> Math.max(0, d.dy - 1))
         .attr('class', 'foreign-object')
         .append('xhtml:body')
         .attr('class', 'command-logger-node-text')
