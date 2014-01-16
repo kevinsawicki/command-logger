@@ -6,8 +6,20 @@ module.exports =
 class CommandLoggerView extends ScrollView
   @content: ->
     @div class: 'pane-item padded command-logger', tabindex: -1, =>
-      @p class: 'text-highlight', outlet: 'categoryHeader'
-      @p class: 'text-info', outlet: 'categorySummary'
+      @div class: 'summary', outlet: 'summary', =>
+        @span class: 'text-highlight', outlet: 'categoryHeader'
+        @span class: 'text-info', outlet: 'categorySummary'
+
+        @div class: 'text-subtle', """
+          Below is a heat map of all the commands you've run in Atom for
+          the current project.
+        """
+
+        @div class: 'text-subtle', """
+          Each colored area represents a different
+          package and you can zoom in and out by clicking it.
+        """
+
       @div class: 'tree-map', outlet: 'treeMap'
 
   ignoredEvents: [
@@ -80,11 +92,11 @@ class CommandLoggerView extends ScrollView
 
     commandText = "#{humanize.intComma(commandCount)} #{humanize.pluralize(commandCount, 'command')}"
     invocationText = "#{humanize.intComma(runCount)} #{humanize.pluralize(runCount, 'invocation')}"
-    @categorySummary.text("#{commandText}, #{invocationText}")
+    @categorySummary.text(" (#{commandText}, #{invocationText})")
 
   updateTreeMapSize: ->
     @treeMap.width(@width())
-    @treeMap.height(@height() - @treeMap.offset().top)
+    @treeMap.height(@height() - @summary.outerHeight())
 
   addTreeMap: ->
     root =
