@@ -5,7 +5,7 @@
       {
         'label': 'Command Logger'
         'submenu': [
-          { 'label': 'Show', 'command': 'command-logger:show' }
+          { 'label': 'Open', 'command': 'command-logger:open' }
           { 'label': 'Clear Data', 'command': 'command-logger:clear-data' }
         ]
       }

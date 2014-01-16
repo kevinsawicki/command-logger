@@ -11,7 +11,7 @@ module.exports =
     atom.project.registerOpener (filePath) =>
       @createView() if filePath is commandLoggerUri
 
-    atom.workspaceView.command 'command-logger:show', ->
+    atom.workspaceView.command 'command-logger:open', ->
       atom.workspaceView.open(commandLoggerUri)
 
     registerTriggeredEvent = (eventName) =>
