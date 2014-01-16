@@ -1,15 +1,27 @@
 {_, $$$, ScrollView} = require 'atom'
+d3 = require 'd3-browserify'
 humanize = require 'humanize-plus'
 
 module.exports =
 class CommandLoggerView extends ScrollView
   @content: ->
     @div class: 'pane-item padded command-logger', tabindex: -1, =>
-      @p class: 'text-highlight', outlet: 'categoryHeader'
-      @p class: 'text-info', outlet: 'categorySummary'
+      @div class: 'summary', outlet: 'summary', =>
+        @span class: 'text-highlight', outlet: 'categoryHeader'
+        @span class: 'text-info', outlet: 'categorySummary'
+
+        @div class: 'text-subtle', """
+          Below is a heat map of all the commands you've run in Atom for the
+          current project.
+        """
+
+        @div class: 'text-subtle', """
+          Each colored area represents a different package and you can zoom in
+          and out by clicking it.
+        """
+
       @div class: 'tree-map', outlet: 'treeMap'
 
-  eventLog: null
   ignoredEvents: [
     'core:backspace'
     'core:cancel'
@@ -23,17 +35,18 @@ class CommandLoggerView extends ScrollView
     'tree-view:directory-modified'
   ]
 
-  initialize: ->
+  initialize: ({@uri, @eventLog}) ->
     super
 
-    @command 'core:cancel', => @detach()
-    @on 'blur', => @detach() unless document.activeElement is this[0]
+  afterAttach: (onDom) ->
+    @addTreeMap() if onDom
 
-  toggle: (@eventLog={}) ->
-    if @hasParent()
-      @detach()
-    else
-      @attach()
+  copy: ->
+    new CommandLoggerView({@uri, @eventLog})
+
+  getUri: -> @uri
+
+  getTitle: -> 'Command Logger'
 
   createNodes:  ->
     categories = {}
@@ -79,11 +92,11 @@ class CommandLoggerView extends ScrollView
 
     commandText = "#{humanize.intComma(commandCount)} #{humanize.pluralize(commandCount, 'command')}"
     invocationText = "#{humanize.intComma(runCount)} #{humanize.pluralize(runCount, 'invocation')}"
-    @categorySummary.text("#{commandText}, #{invocationText}")
+    @categorySummary.text(" (#{commandText}, #{invocationText})")
 
   updateTreeMapSize: ->
     @treeMap.width(@width())
-    @treeMap.height(@height() - @treeMap.offset().top)
+    @treeMap.height(@height() - @summary.outerHeight())
 
   addTreeMap: ->
     root =
@@ -97,8 +110,6 @@ class CommandLoggerView extends ScrollView
     @updateTreeMapSize()
     w = @treeMap.width()
     h = @treeMap.height()
-
-    d3 = require 'd3-browserify'
 
     x = d3.scale.linear().range([0, w])
     y = d3.scale.linear().range([0, h])
@@ -136,7 +147,7 @@ class CommandLoggerView extends ScrollView
                        .sticky(true)
                        .value((d) -> d.size)
 
-    svg = d3.select('.command-logger .tree-map')
+    svg = d3.select(@treeMap[0])
             .append('div')
             .style('width', "#{w}px")
             .style('height', "#{h}px")
@@ -157,28 +168,16 @@ class CommandLoggerView extends ScrollView
               .on('click', (d) -> if node is d.parent then zoom(root) else zoom(d.parent))
 
     cell.append('rect')
-        .attr('width', (d) -> d.dx - 1)
-        .attr('height', (d) -> d.dy - 1)
+        .attr('width', (d) -> Math.max(0, d.dx - 1))
+        .attr('height', (d) -> Math.max(0, d.dy - 1))
         .style('fill', (d) -> color(d.parent.name))
 
     cell.append('foreignObject')
-        .attr('width', (d) -> d.dx - 1)
-        .attr('height', (d) -> d.dy - 1)
+        .attr('width', (d) -> Math.max(0, d.dx - 1))
+        .attr('height', (d) -> Math.max(0, d.dy - 1))
         .attr('class', 'foreign-object')
         .append('xhtml:body')
         .attr('class', 'command-logger-node-text')
         .html((d) => @createNodeContent(d))
 
-    d3.select('.command-logger').on('click', -> zoom(root))
-
-  attach: ->
-    atom.workspaceView.append(this)
-    @addTreeMap()
-    @focus()
-
-  detach: ->
-    return if @detaching
-    @detaching = true
-    super
-    atom.workspaceView.focus()
-    @detaching = false
+    d3.select(@[0]).on('click', -> zoom(root))
