@@ -1,4 +1,5 @@
 {_, $$$, ScrollView} = require 'atom'
+d3 = require 'd3-browserify'
 humanize = require 'humanize-plus'
 
 module.exports =
@@ -23,17 +24,18 @@ class CommandLoggerView extends ScrollView
     'tree-view:directory-modified'
   ]
 
-  initialize: ->
+  initialize: ({@uri, @eventLog}) ->
     super
 
-    @command 'core:cancel', => @detach()
-    @on 'blur', => @detach() unless document.activeElement is this[0]
+  afterAttach: (onDom) ->
+    @addTreeMap() if onDom
 
-  toggle: (@eventLog={}) ->
-    if @hasParent()
-      @detach()
-    else
-      @attach()
+  copy: ->
+    new CommandLoggerView({@uri, @eventLog})
+
+  getUri: -> @uri
+
+  getTitle: -> 'Command Logger'
 
   createNodes:  ->
     categories = {}
@@ -98,8 +100,6 @@ class CommandLoggerView extends ScrollView
     w = @treeMap.width()
     h = @treeMap.height()
 
-    d3 = require 'd3-browserify'
-
     x = d3.scale.linear().range([0, w])
     y = d3.scale.linear().range([0, h])
     color = d3.scale.category20()
@@ -136,7 +136,7 @@ class CommandLoggerView extends ScrollView
                        .sticky(true)
                        .value((d) -> d.size)
 
-    svg = d3.select('.command-logger .tree-map')
+    svg = d3.select(@treeMap[0])
             .append('div')
             .style('width', "#{w}px")
             .style('height', "#{h}px")
@@ -169,16 +169,4 @@ class CommandLoggerView extends ScrollView
         .attr('class', 'command-logger-node-text')
         .html((d) => @createNodeContent(d))
 
-    d3.select('.command-logger').on('click', -> zoom(root))
-
-  attach: ->
-    atom.workspaceView.append(this)
-    @addTreeMap()
-    @focus()
-
-  detach: ->
-    return if @detaching
-    @detaching = true
-    super
-    atom.workspaceView.focus()
-    @detaching = false
+    d3.select(@[0]).on('click', -> zoom(root))

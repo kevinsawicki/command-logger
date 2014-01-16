@@ -1,14 +1,19 @@
 {$} = require 'atom'
+CommandLoggerView = null
+
+commandLoggerUri = 'atom://command-logger'
 
 module.exports =
-  eventLog: {}
-  commandLoggerView: null
-  originalTrigger: null
-
   activate: (state) ->
     @eventLog = state.eventLog ? {}
     atom.workspaceView.command 'command-logger:clear-data', => @eventLog = {}
-    atom.workspaceView.command 'command-logger:toggle', => @createView().toggle(@eventLog)
+
+    atom.project.registerOpener (filePath) =>
+      if filePath is commandLoggerUri
+        @createView({uri: commandLoggerUri, @eventLog})
+
+    atom.workspaceView.command 'command-logger:show', ->
+      atom.workspaceView.open(commandLoggerUri)
 
     registerTriggeredEvent = (eventName) =>
       eventNameLog = @eventLog[eventName]
@@ -28,14 +33,11 @@ module.exports =
 
   deactivate: ->
     $.fn.trigger = @originalTrigger if @originalTrigger?
-    @commandLoggerView = null
     @eventLog = {}
 
   serialize: ->
     {@eventLog}
 
-  createView: ->
-    unless @commandLoggerView?
-      CommandLoggerView = require './command-logger-view'
-      @commandLoggerView = new CommandLoggerView
-    @commandLoggerView
+  createView: (state) ->
+    CommandLoggerView ?= require './command-logger-view'
+    new CommandLoggerView(state)
