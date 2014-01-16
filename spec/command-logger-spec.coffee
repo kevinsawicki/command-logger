@@ -50,3 +50,17 @@ describe "CommandLogger", ->
         continue unless node.name is 'Editor'
         for child in node.children
           expect(child.name.indexOf('Delete Line')).toBe -1
+
+  describe "command-logger:open", ->
+    it "opens the command logger in a pane", ->
+      atom.workspaceView.attachToDom()
+      atom.workspaceView.trigger 'command-logger:open'
+
+      waitsFor ->
+        atom.workspaceView.getActivePaneItem().treeMap?
+
+      runs ->
+        commandLoggerView = atom.workspaceView.getActivePaneItem()
+        expect(commandLoggerView.categoryHeader.text()).toBe 'All Commands'
+        expect(commandLoggerView.categorySummary.text()).toBe ' (1 command, 1 invocation)'
+        expect(commandLoggerView.treeMap.find('svg').length).toBe 1
