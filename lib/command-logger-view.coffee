@@ -11,13 +11,13 @@ class CommandLoggerView extends ScrollView
         @span class: 'text-info', outlet: 'categorySummary'
 
         @div class: 'text-subtle', """
-          Below is a heat map of all the commands you've run in Atom for
-          the current project.
+          Below is a heat map of all the commands you've run in Atom for the
+          current project.
         """
 
         @div class: 'text-subtle', """
-          Each colored area represents a different
-          package and you can zoom in and out by clicking it.
+          Each colored area represents a different package and you can zoom in
+          and out by clicking it.
         """
 
       @div class: 'tree-map', outlet: 'treeMap'
