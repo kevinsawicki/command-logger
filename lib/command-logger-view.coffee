@@ -10,7 +10,6 @@ class CommandLoggerView extends ScrollView
       @p class: 'text-info', outlet: 'categorySummary'
       @div class: 'tree-map', outlet: 'treeMap'
 
-  eventLog: null
   ignoredEvents: [
     'core:backspace'
     'core:cancel'
