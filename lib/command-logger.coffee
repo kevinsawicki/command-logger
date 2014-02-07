@@ -4,8 +4,8 @@ CommandLoggerView = null
 commandLoggerUri = 'atom://command-logger'
 
 module.exports =
-  activate: (state) ->
-    @eventLog = state.eventLog ? {}
+  activate: ({@eventLog}={}) ->
+    @eventLog ?= {}
     atom.workspaceView.command 'command-logger:clear-data', => @eventLog = {}
 
     atom.project.registerOpener (filePath) =>
