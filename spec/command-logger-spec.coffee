@@ -6,9 +6,14 @@ describe "CommandLogger", ->
   beforeEach ->
     atom.workspaceView = new WorkspaceView
     atom.workspaceView.openSync('sample.js')
-    commandLogger = atom.packages.activatePackage('command-logger').mainModule
-    commandLogger.eventLog = {}
     editor = atom.workspaceView.getActiveView()
+
+    waitsForPromise ->
+      atom.packages.activatePackage('command-logger')
+
+    runs ->
+      commandLogger = atom.packages.getActivePackage('command-logger').mainModule
+      commandLogger.eventLog = {}
 
   describe "when a command is triggered", ->
     it "records the number of times the command is triggered", ->
@@ -46,9 +51,8 @@ describe "CommandLogger", ->
       editor.trigger 'editor:delete-line'
       commandLoggerView.eventLog = commandLogger.eventLog
       nodes = commandLoggerView.createNodes()
-      for node in nodes
-        continue unless node.name is 'Editor'
-        for child in node.children
+      for {name, children} in nodes when name is 'Editor'
+        for child in children
           expect(child.name.indexOf('Delete Line')).toBe -1
 
   describe "command-logger:open", ->
