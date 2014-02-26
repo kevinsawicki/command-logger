@@ -9,7 +9,7 @@
     "humanize-plus": "~1.4.2",
     "underscore-plus": "1.x"
   },
-  "repository": "https://github.com/atom/command-logger",
+  "repository": "https://github.com/kevinsawicki/command-logger",
   "engines": {
     "atom": "*"
   }
