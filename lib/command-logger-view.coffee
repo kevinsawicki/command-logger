@@ -12,7 +12,7 @@ class CommandLoggerView extends ScrollView
         @span class: 'text-info', outlet: 'categorySummary'
 
         @div class: 'text-subtle', """
-          Below is a heat map of all the commands you've run in Atom for the
+          Below is a treemap of all the commands you've run in Atom for the
           current project.
         """
 
