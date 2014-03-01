@@ -2,7 +2,7 @@
   "name": "command-logger",
   "version": "0.15.0",
   "main": "./lib/command-logger",
-  "description": "View a heat map of your Atom activity. Open from the command palette.",
+  "description": "View a treemap of your Atom activity. Open from the command palette.",
   "license": "MIT",
   "dependencies": {
     "d3-browserify": "3.3.13",
