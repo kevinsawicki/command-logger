@@ -11,6 +11,6 @@
   },
   "repository": "https://github.com/kevinsawicki/command-logger",
   "engines": {
-    "atom": "*"
+    "atom": ">0.82.0"
   }
 }
