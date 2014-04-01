@@ -63,6 +63,7 @@ describe "CommandLogger", ->
 
   describe "command-logger:open", ->
     it "opens the command logger in a pane", ->
+      triggerKey('tab')
       atom.workspaceView.trigger 'command-logger:open'
 
       waitsFor ->
