@@ -23,15 +23,12 @@ module.exports =
         @eventLog[eventName] = eventNameLog
       eventNameLog.count++
       eventNameLog.lastRun = Date.now()
-    trigger = $.fn.trigger
-    @originalTrigger = trigger
-    $.fn.trigger = (event) ->
-      eventName = event.type ? event
-      registerTriggeredEvent(eventName) if $(this).events()[eventName]
-      trigger.apply(this, arguments)
+
+    atom.keymap.on 'matched.command-logger', ({binding}) ->
+      registerTriggeredEvent(binding.command)
 
   deactivate: ->
-    $.fn.trigger = @originalTrigger if @originalTrigger?
+    atom.keymap.off('.command-logger')
     @eventLog = {}
 
   serialize: ->
