@@ -3,10 +3,15 @@
 describe "CommandLogger", ->
   [commandLogger, editor] = []
 
+  triggerBackspaceCommand = ->
+    editor.trigger(window.keydownEvent('backspace'))
+
   beforeEach ->
     atom.workspaceView = new WorkspaceView
     atom.workspaceView.openSync('sample.js')
+    atom.workspaceView.attachToDom()
     editor = atom.workspaceView.getActiveView()
+    editor.enableKeymap()
 
     waitsForPromise ->
       atom.packages.activatePackage('command-logger')
@@ -16,16 +21,16 @@ describe "CommandLogger", ->
       commandLogger.eventLog = {}
 
   describe "when a command is triggered", ->
-    it "records the number of times the command is triggered", ->
+    it "records the number of times the commanxd is triggered", ->
       expect(commandLogger.eventLog['core:backspace']).toBeUndefined()
-      editor.trigger 'core:backspace'
+      triggerBackspaceCommand()
       expect(commandLogger.eventLog['core:backspace'].count).toBe 1
-      editor.trigger 'core:backspace'
+      triggerBackspaceCommand()
       expect(commandLogger.eventLog['core:backspace'].count).toBe 2
 
     it "records the date the command was last triggered", ->
       expect(commandLogger.eventLog['core:backspace']).toBeUndefined()
-      editor.trigger 'core:backspace'
+      triggerBackspaceCommand()
       lastRun = commandLogger.eventLog['core:backspace'].lastRun
       expect(lastRun).toBeGreaterThan 0
       start = Date.now()
@@ -33,25 +38,28 @@ describe "CommandLogger", ->
         Date.now() > start
 
       runs ->
-        editor.trigger 'core:backspace'
+        triggerBackspaceCommand()
         expect(commandLogger.eventLog['core:backspace'].lastRun).toBeGreaterThan lastRun
 
   describe "when the data is cleared", ->
     it "removes all triggered events from the log", ->
       expect(commandLogger.eventLog['core:backspace']).toBeUndefined()
-      editor.trigger 'core:backspace'
+      triggerBackspaceCommand()
       expect(commandLogger.eventLog['core:backspace'].count).toBe 1
       atom.workspaceView.trigger 'command-logger:clear-data'
       expect(commandLogger.eventLog['core:backspace']).toBeUndefined()
 
   describe "when an event is ignored", ->
-    it "does not create a node for that event", ->
-      commandLoggerView = commandLogger.createView()
-      commandLoggerView.ignoredEvents.push 'editor:delete-line'
+    fit "does not create a node for that event", ->
       editor.trigger 'editor:delete-line'
+      triggerBackspaceCommand()
+      commandLoggerView = commandLogger.createView()
+      # commandLoggerView.ignoredEvents.push 'editor:delete-line'
       commandLoggerView.eventLog = commandLogger.eventLog
       nodes = commandLoggerView.createNodes()
-      for {name, children} in nodes when name is 'Editor'
+
+      console.log nodes
+      for {name, children} in nodes# when name is 'Editor'
         for child in children
           expect(child.name.indexOf('Delete Line')).toBe -1
 
