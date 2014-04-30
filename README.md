@@ -1,4 +1,4 @@
-# Command Logger package
+# Command Logger package [![Build Status](https://travis-ci.org/kevinsawicki/command-logger.svg?branch=master)](https://travis-ci.org/kevinsawicki/command-logger)
 
 View a treemap of all the commands you have run in Atom, open from the Command
 Palette (`cmd-shift-p`) or from the _Packages > Command Logger > Open_ menu.
