@@ -8,7 +8,7 @@ module.exports =
     @eventLog ?= {}
     atom.workspaceView.command 'command-logger:clear-data', => @eventLog = {}
 
-    atom.project.registerOpener (filePath) =>
+    atom.workspace.registerOpener (filePath) =>
       @createView() if filePath is commandLoggerUri
 
     atom.workspaceView.command 'command-logger:open', ->
