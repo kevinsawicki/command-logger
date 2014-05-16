@@ -1,6 +1,6 @@
 {
   "name": "command-logger",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "main": "./lib/command-logger",
   "description": "View a treemap of your Atom activity. Open from the command palette.",
   "license": "MIT",
