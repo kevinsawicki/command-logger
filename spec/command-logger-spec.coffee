@@ -5,8 +5,12 @@ describe "CommandLogger", ->
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView
-    atom.workspaceView.openSync('sample.js')
-    editor = atom.workspaceView.getActiveView()
+
+    waitsForPromise ->
+      atom.workspace.open('sample.js')
+
+    runs ->
+      editor = atom.workspaceView.getActiveView()
 
     waitsForPromise ->
       atom.packages.activatePackage('command-logger')
