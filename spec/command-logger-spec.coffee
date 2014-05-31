@@ -19,7 +19,7 @@ describe "CommandLogger", ->
       commandLogger = atom.packages.getActivePackage('command-logger').mainModule
       commandLogger.eventLog = {}
 
-  describe "when a command is triggered", ->
+  describe "when a command is triggered on a view", ->
     it "records the number of times the command is triggered", ->
       expect(commandLogger.eventLog['core:backspace']).toBeUndefined()
       editor.trigger 'core:backspace'
@@ -39,6 +39,14 @@ describe "CommandLogger", ->
       runs ->
         editor.trigger 'core:backspace'
         expect(commandLogger.eventLog['core:backspace'].lastRun).toBeGreaterThan lastRun
+
+  describe "when a command is triggered via a keybinding", ->
+    it "records the event", ->
+      expect(commandLogger.eventLog['core:backspace']).toBeUndefined()
+      atom.keymap.emit 'matched', binding: command: 'core:backspace'
+      expect(commandLogger.eventLog['core:backspace'].count).toBe 1
+      atom.keymap.emit 'matched', binding: command: 'core:backspace'
+      expect(commandLogger.eventLog['core:backspace'].count).toBe 2
 
   describe "when the data is cleared", ->
     it "removes all triggered events from the log", ->

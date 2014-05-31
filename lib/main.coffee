@@ -34,8 +34,12 @@ module.exports =
       registerTriggeredEvent(eventName) if $(this).events()[eventName]
       trigger.apply(this, arguments)
 
+    @keymapMatchedSubscription = atom.keymap.on 'matched', ({binding}) =>
+      registerTriggeredEvent(binding.command)
+
   deactivate: ->
     $.fn.trigger = @originalTrigger if @originalTrigger?
+    @keymapMatchedSubscription?.off()
     @eventLog = {}
 
   serialize: ->
