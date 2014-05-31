@@ -50,14 +50,20 @@ describe "CommandLogger", ->
 
   describe "when an event is ignored", ->
     it "does not create a node for that event", ->
-      commandLoggerView = commandLogger.createView()
-      commandLoggerView.ignoredEvents.push 'editor:delete-line'
-      editor.trigger 'editor:delete-line'
-      commandLoggerView.eventLog = commandLogger.eventLog
-      nodes = commandLoggerView.createNodes()
-      for {name, children} in nodes when name is 'Editor'
-        for child in children
-          expect(child.name.indexOf('Delete Line')).toBe -1
+      atom.workspaceView.trigger 'command-logger:open'
+
+      waitsFor ->
+        atom.workspaceView.getActivePaneItem().treeMap?
+
+      runs ->
+        commandLoggerView = atom.workspaceView.getActivePaneItem()
+        commandLoggerView.ignoredEvents.push 'editor:delete-line'
+        editor.trigger 'editor:delete-line'
+        commandLoggerView.eventLog = commandLogger.eventLog
+        nodes = commandLoggerView.createNodes()
+        for {name, children} in nodes when name is 'Editor'
+          for child in children
+            expect(child.name.indexOf('Delete Line')).toBe -1
 
   describe "command-logger:open", ->
     it "opens the command logger in a pane", ->
