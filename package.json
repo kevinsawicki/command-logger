@@ -5,7 +5,10 @@
   "description": "View a treemap of your Atom activity. Open from the command palette.",
   "license": "MIT",
   "dependencies": {
-    "atom-space-pen-views": "^2.0.3"
+    "atom-space-pen-views": "^2.0.3",
+    "d3-browserify": "3.3.13",
+    "humanize-plus": "~1.4.2",
+    "underscore-plus": "1.x"
   },
   "repository": "https://github.com/kevinsawicki/command-logger",
   "engines": {
