@@ -1,7 +1,8 @@
 _ = require 'underscore-plus'
-{$$$, ScrollView} = require 'atom'
+{$$$, ScrollView} = require 'atom-space-pen-views'
 d3 = require 'd3-browserify'
 humanize = require 'humanize-plus'
+{Disposable} = require 'atom'
 
 module.exports =
 class CommandLoggerView extends ScrollView
@@ -32,22 +33,34 @@ class CommandLoggerView extends ScrollView
     'core:move-left'
     'core:move-right'
     'core:move-up'
+    'cursor:moved'
     'editor:newline'
+    'editor:attached'
+    'editor:display-updated'
     'tree-view:directory-modified'
+  ]
+
+  ignoredCategories: [
+    'pane'
+    'pane-container'
   ]
 
   initialize: ({@uri, @eventLog}) ->
     super
 
-  afterAttach: (onDom) ->
-    @addTreeMap() if onDom
+  attached: (onDom) ->
+    @addTreeMap()
 
   copy: ->
     new CommandLoggerView({@uri, @eventLog})
 
-  getUri: -> @uri
+  getURI: -> @uri
 
   getTitle: -> 'Command Logger'
+
+  # TODO Remove after Atom 1.0
+  onDidChangeTitle: -> new Disposable()
+  onDidChangeModified: -> new Disposable()
 
   createNodes:  ->
     categories = {}
@@ -57,7 +70,9 @@ class CommandLoggerView extends ScrollView
       if categoryStart is -1
         categoryName = 'Uncategorized'
       else
-        categoryName = _.humanizeEventName(eventName.substring(0, categoryStart))
+        categoryName = eventName.substring(0, categoryStart)
+        continue if _.contains(@ignoredCategories, categoryName)
+        categoryName = _.humanizeEventName(categoryName)
       category = categories[categoryName]
       unless category
         category =
