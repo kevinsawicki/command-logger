@@ -39,9 +39,9 @@ describe "CommandLogger", ->
   describe "when a command is triggered via a keybinding", ->
     it "records the event", ->
       expect(commandLogger.eventLog['core:backspace']).toBeUndefined()
-      atom.keymap.emitter.emit 'did-match-binding', binding: command: 'core:backspace'
+      atom.keymaps.emitter.emit 'did-match-binding', binding: command: 'core:backspace'
       expect(commandLogger.eventLog['core:backspace'].count).toBe 1
-      atom.keymap.emitter.emit 'did-match-binding', binding: command: 'core:backspace'
+      atom.keymaps.emitter.emit 'did-match-binding', binding: command: 'core:backspace'
       expect(commandLogger.eventLog['core:backspace'].count).toBe 2
 
   describe "when the data is cleared", ->

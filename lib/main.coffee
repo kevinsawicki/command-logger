@@ -35,7 +35,7 @@ module.exports =
     @disposables.add atom.commands.onWillDispatch ({type}) ->
       registerTriggeredEvent(type)
 
-    @disposables.add atom.keymap.onDidMatchBinding ({binding}) =>
+    @disposables.add atom.keymaps.onDidMatchBinding ({binding}) =>
       registerTriggeredEvent(binding.command)
 
   deactivate: ->
